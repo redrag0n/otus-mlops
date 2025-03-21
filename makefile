@@ -12,3 +12,16 @@ tf_destroy:
 
 yc_list_images:
 	yc compute image list --folder-id standard-images > images.txt
+
+sync-repo:
+	rsync -avz \
+		--exclude=.venv \
+		--exclude=infrastructure/.terraform \
+		--exclude=.terraform \
+		--exclude=.terraform-version \
+		--exclude=.terraformrc \
+		--exclude=*.info \
+		--exclude=*.lock.hcl \
+		--exclude=*.tfstate \
+		--exclude=*.backup \
+		--exclude=*.json . yc-proxy:/home/ubuntu/otus/otus-practice-cloud-infra

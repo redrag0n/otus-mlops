@@ -110,7 +110,7 @@ variable "dataproc_compute_resources" {
   default = {
     resource_preset_id = "s3-c4-m16"
     disk_type_id       = "network-ssd"
-    disk_size          = 60
+    disk_size          = 50
   }
 }
 
@@ -123,6 +123,6 @@ variable "dataproc_data_resources" {
   default = {
     resource_preset_id = "s3-c4-m16"
     disk_type_id       = "network-ssd"
-    disk_size          = 60
+    disk_size          = 50
   }
 }
