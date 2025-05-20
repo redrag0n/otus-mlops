@@ -94,36 +94,40 @@ variable "dataproc_master_resources" {
     resource_preset_id = string
     disk_type_id       = string
     disk_size          = number
+    host_count         = number
   })
   default = {
-    resource_preset_id = "s3-c4-m16"
-    disk_type_id       = "network-ssd"
+    resource_preset_id = "s3-c2-m8"
+    disk_type_id       = "network-hdd"
     disk_size          = 40
+    host_count         = 1
   }
 }
 
-variable "dataproc_compute_resources" {
-  type = object({
-    resource_preset_id = string
-    disk_type_id       = string
-    disk_size          = number
-  })
-  default = {
-    resource_preset_id = "s3-c4-m16"
-    disk_type_id       = "network-ssd"
-    disk_size          = 50
-  }
-}
+#variable "dataproc_compute_resources" {
+#  type = object({
+#    resource_preset_id = string
+#    disk_type_id       = string
+#    disk_size          = number
+#  })
+#  default = {
+#    resource_preset_id = "s3-c4-m16"
+#    disk_type_id       = "network-ssd"
+#    disk_size          = 50
+#  }
+#}
 
 variable "dataproc_data_resources" {
   type = object({
     resource_preset_id = string
     disk_type_id       = string
     disk_size          = number
+    host_count         = number
   })
   default = {
     resource_preset_id = "s3-c4-m16"
-    disk_type_id       = "network-ssd"
-    disk_size          = 50
+    disk_type_id       = "network-hdd"
+    disk_size          = 128
+    host_count         = 3
   }
 }
