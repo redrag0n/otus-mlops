@@ -117,12 +117,12 @@ log "Copying file from source bucket to destination bucket"
 #    s3://otus-mlops-source-data/$FILE_NAME \
 #    s3://$TARGET_BUCKET/$FILE_NAME
 
-s3cmd sync \
-    --config=/home/ubuntu/.s3cfg \
-    --acl-public \
-    --recursive \
-    s3://otus-mlops-source-data \
-    s3://$TARGET_BUCKET
+#s3cmd sync \
+#    --config=/home/ubuntu/.s3cfg \
+#    --acl-public \
+#    --recursive \
+#    s3://otus-mlops-source-data \
+#    s3://$TARGET_BUCKET
 
 # Проверяем успешность копирования
 if [ $? -eq 0 ]; then
@@ -140,7 +140,11 @@ mkdir -p /home/ubuntu/scripts
 # Копируем скрипт upload_data_to_hdfs.sh на прокси-машину
 log "Copying upload_data_to_hdfs.sh script to proxy machine"
 echo '${upload_data_to_hdfs_content}' > /home/ubuntu/scripts/upload_data_to_hdfs.sh
+echo '${clean_data_py}' > /home/ubuntu/scripts/clean_data.py
+echo '${clean_data_sh}' > /home/ubuntu/scripts/clean_data.sh
+
 sed -i 's/{{ s3_bucket }}/'$TARGET_BUCKET'/g' /home/ubuntu/scripts/upload_data_to_hdfs.sh
+sed -i 's/{{ s3_bucket }}/'$TARGET_BUCKET'/g' /home/ubuntu/scripts/clean_data.sh
 
 # Устанавливаем правильные разрешения для скрипта на прокси-машине
 log "Setting permissions for upload_data_to_hdfs.sh on proxy machine"
@@ -166,6 +170,24 @@ log "Setting permissions for upload_data_to_hdfs.sh on master node"
 ssh -i /home/ubuntu/.ssh/dataproc_key -o StrictHostKeyChecking=no ubuntu@$DATAPROC_MASTER_FQDN "chmod +x /home/ubuntu/upload_data_to_hdfs.sh"
 
 log "Script upload_data_to_hdfs.sh has been copied to the master node"
+
+# Копируем скрипт clean_data.sh с прокси-машины на мастер-ноду
+log "Copying clean_data scripts from proxy machine to master node"
+scp -i /home/ubuntu/.ssh/dataproc_key -o StrictHostKeyChecking=no /home/ubuntu/scripts/clean_data.sh ubuntu@$DATAPROC_MASTER_FQDN:/home/ubuntu/
+scp -i /home/ubuntu/.ssh/dataproc_key -o StrictHostKeyChecking=no /home/ubuntu/scripts/clean_data.py ubuntu@$DATAPROC_MASTER_FQDN:/home/ubuntu/
+
+# Устанавливаем правильные разрешения для скрипта на мастер-ноде
+log "Setting permissions for clean_data.sh on master node"
+ssh -i /home/ubuntu/.ssh/dataproc_key -o StrictHostKeyChecking=no ubuntu@$DATAPROC_MASTER_FQDN "chmod +x /home/ubuntu/clean_data.sh"
+
+log "Script upload_data_to_hdfs.sh and clean_data has been copied to the master node"
+
+## Копируем данные из proxy в мастер-ноду
+#log "Launch upload_data_to_hdfs.sh on master node"
+#ssh -i /home/ubuntu/.ssh/dataproc_key -o StrictHostKeyChecking=no ubuntu@$DATAPROC_MASTER_FQDN "bash /home/ubuntu/upload_data_to_hdfs.sh"
+#
+#log "Data from proxy has been copied to the master node"
+
 
 # Изменяем владельца лог-файла
 log "Changing ownership of log file"

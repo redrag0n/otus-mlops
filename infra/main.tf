@@ -139,7 +139,7 @@ resource "yandex_dataproc_cluster" "dataproc_cluster" {
     version_id = var.yc_dataproc_version
 
     hadoop {
-      services = ["HDFS", "YARN", "SPARK", "HIVE", "TEZ"]
+      services = ["HDFS", "YARN", "SPARK", "TEZ"]
       properties = {
         "yarn:yarn.resourcemanager.am.max-attempts" = 5
       }
@@ -199,6 +199,8 @@ resource "yandex_compute_instance" "proxy" {
       secret_key                  = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
       s3_bucket                   = yandex_storage_bucket.data_bucket.bucket
       upload_data_to_hdfs_content = file("${path.root}/scripts/upload_data_to_hdfs.sh")
+      clean_data_py = file("${path.root}/scripts/clean_data.py")
+      clean_data_sh = file("${path.root}/scripts/clean_data.sh")
     })
   }
 
