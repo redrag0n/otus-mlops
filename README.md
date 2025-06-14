@@ -9,6 +9,9 @@ https://storage.yandexcloud.net/otus-bucket-b1gtngf0a2jerlvfrkqt
 
 ![Изображение](image.png)
 
-Аналитика в noteboooks/transactions_analysis.ipynb
+
+## Очистка данных
+
+Аналитика в notebooks/transactions_analysis.ipynb
 
 Скрипт по очистке scripts/clean_data.sh
